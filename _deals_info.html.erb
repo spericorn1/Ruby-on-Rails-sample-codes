@@ -1,0 +1,87 @@
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pzero">
+    <% current_dispensary.deals.each do |deal| %>
+        <% if dispensary_points_class(deal.points).present? %>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 pzero">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 prlzero wb <%= dispensary_points_class(deal.points)[:class] %>">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 wb-content">
+                    <a href=<%= edit_dispensaries_deal_path(deal) %> ><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i></a>
+                    <h6 class="header-cap"><%= dispensary_points_class(deal.points)[:type] %></h6>
+                    <h1><%= deal.points %></h1>
+                    <hr class="wb-seperator">
+                    <h6 class="header-cap"><%= deal.name %></h6>
+                </div>
+            </div>
+        </div>
+        <% end %>
+    <% end %>
+    <% if DispensaryReferralDeal.find_by(dispensaries_id:current_dispensary.id).present? %>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 pzero">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 prlzero wb widget-box-4">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 wb-content">
+                <a href=<%= edit_dispensaries_deal_path(DispensaryReferralDeal.find_by(dispensaries_id:current_dispensary.id).id) %> ><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i></a>
+                <h6 class="header-cap">REFERRAL</h6>
+                <h1><%= DispensaryReferralDeal.find_by(dispensaries_id:current_dispensary.id).points %></h1>
+                <hr class="wb-seperator">
+                <h6 class="header-cap"><%= DispensaryReferralDeal.find_by(dispensaries_id:current_dispensary.id).name %></h6>
+            </div>
+        </div>
+    </div>
+    <% end %>
+</div>
+
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pzero">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pzero">
+        <div id="no-more-tables">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 table-container prlzero">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 table-header prlzero">
+                <h2>Reward Statistics</h2>
+            </div>
+            <table class="col-sm-12 table-bordered table-condensed cf reefer-table pzero">
+                <thead class="cf">
+                    <tr>
+                        <th>Reward</th>
+                        <th>Point Value</th>
+                        <th>Redemptions</th>
+                        <th>Reward Size</th>
+                        <th>% of Redemptions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% current_dispensary.deals.each do |deal| %>
+                        <tr>
+                            <td data-title="Monday"><%= deal.name.gsub("Free", "") %></td>
+                            <td data-title="Tuesday"><%= deal.points %></td>
+                            <% if deal.redeemed_rewards[0] %>
+                            <td data-title="Wednesday"><%= deal.redeemed_rewards[0][:redeemed] %></td>
+                            <% else %>
+                            <td data-title="Wednesday">0</td>
+                            <% end %>
+                            <% if dispensary_points_class(deal.points).present? %>
+                            <td data-title="Thursday"><%=dispensary_points_class(deal.points)[:type] %> </td>
+                            <% end %>
+                            <% if deal.redeemed_rewards[0] %>
+                            <td data-title="Wednesday"><%= deal.redeemed_rewards[0][:total_count] %></td>
+                            <% else %>
+                            <td data-title="Wednesday">0%</td>
+                            <% end %>
+                        </tr>
+                    <% end %>
+                    <% if DispensaryReferralDeal.find_by(dispensaries_id:current_dispensary.id).present? %>
+                    <tr>
+                        <td data-title="Monday"><%= DispensaryReferralDeal.find_by(dispensaries_id:current_dispensary.id).name.gsub("Free", "") %></td>
+                        <td data-title="Tuesday"><%= DispensaryReferralDeal.find_by(dispensaries_id:current_dispensary.id).points %></td>
+                        <td data-title="Wednesday"><%= current_dispensary.referred_users %></td>
+                        <td data-title="Thursday">Referral</td>
+                        <td data-title="Friday">N/A</td>
+                    </tr>
+                    <% end %>
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+ </div>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700" rel="stylesheet" type="text/css">
